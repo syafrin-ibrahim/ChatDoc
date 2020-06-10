@@ -1,4 +1,4 @@
 import Logo from './logo.svg';
 import Started from './get-started.png';
-
-export { Logo, Started };
+import NullPhoto from './null-photo.png';
+export { Logo, Started, NullPhoto };
