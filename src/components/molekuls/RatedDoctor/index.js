@@ -6,7 +6,7 @@ import { fonts, colors } from '../../../utils'
 const RatedDoctor = () => {
     return (
         <View style={styles.container}>
-            <Image source={DummyDoctor1} />
+            <Image source={DummyDoctor1} style={styles.avatar}/>
             <View style={styles.profile}>
 
                 <Text style={styles.name}>Rachel Maryama</Text>

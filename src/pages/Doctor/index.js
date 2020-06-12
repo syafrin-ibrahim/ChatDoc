@@ -12,7 +12,7 @@ const Doctor = () => {
                    <View style={styles.wrapperSection}>
                         <Gap height={30} />
                         <HomeProfile />
-                        <Text>Mau Konsultasi Dengan Siapa Hari Ini</Text>
+                        <Text style={styles.welcome}>Mau Konsultasi Dengan Siapa Hari Ini</Text>
                    </View>
                 <View style={styles.wrapper}>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>

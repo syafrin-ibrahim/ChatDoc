@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         color: colors.text.primary
     },
     categ: {
-        fontSize: 12,
+        fontSize: 10,
         fontFamily: fonts.primary[600],
         color: colors.text.primary
     }

@@ -12,7 +12,7 @@ const HomeProfile = () => {
                 <Text style={styles.name}>Shayna Aman</Text>
                 <Text style={styles.profession}>Product Designer</Text>
             </View>
-            <Text>Komponen Home Profile</Text>
+            
         </View>
     )
 }
