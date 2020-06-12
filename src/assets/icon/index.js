@@ -7,7 +7,7 @@ import IcMessages from './ic-messages.svg';
 import IcMessagesActive from './ic-messages-active.svg';
 import IcHospital from './ic-hospitals.svg';
 import IcHospitalActive from './ic-hospitals-active.svg';
-
+import IcStar from './ic-star.svg'
 export { IconBack,
      AddPhoto,
      RemovePhoto,
@@ -16,5 +16,6 @@ export { IconBack,
      IcMessages,
      IcMessagesActive,
     IcHospital,
-    IcHospitalActive
+    IcHospitalActive,
+    IcStar
  }
