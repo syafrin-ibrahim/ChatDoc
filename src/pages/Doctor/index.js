@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { HomeProfile, DoctorCategori, RatedDoctor, Gap, NewsItem } from '../../components'
 import { fonts, colors } from '../../utils'
-import { JSONCategory} from '../../assets';
+import { JSONCategory, DummyDoctor1} from '../../assets';
 
 const Doctor = ({navigation}) => {
     return (
@@ -12,7 +12,7 @@ const Doctor = ({navigation}) => {
                <ScrollView showsVerticalScrollIndicator={false}>
                    <View style={styles.wrapperSection}>
                         <Gap height={30} />
-                        <HomeProfile />
+                        <HomeProfile onPress={()=> navigation.navigate('UserProfile')}/>
                         <Text style={styles.welcome}>Mau Konsultasi Dengan Siapa Hari Ini</Text>
                    </View>
                 <View style={styles.wrapper}>
@@ -32,9 +32,9 @@ const Doctor = ({navigation}) => {
                 </View>
                 <View style={styles.wrapperSection}>
                     <Text style={styles.sectionLabel}>Top Rated Doctor</Text>
-                    <RatedDoctor />
-                    <RatedDoctor />
-                    <RatedDoctor />
+                    <RatedDoctor name="abraham samad" desc="psikiater" avatar={DummyDoctor1} onPress={()=> navigation.navigate('DoctorProfile')}     />
+                    <RatedDoctor name="leo manoppo" desc="dentist" avatar={DummyDoctor1}/>
+                    <RatedDoctor name="abdillah sugeng" desc="child" avatar={DummyDoctor1}/>
                     <Text style={styles.sectionLabel}>Goog News</Text>
                 </View>               
                 <NewsItem />

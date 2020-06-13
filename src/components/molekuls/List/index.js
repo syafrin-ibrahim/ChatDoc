@@ -1,13 +1,29 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { colors, fonts } from '../../../utils'
-import { IcNext } from '../../../assets'
+import { IcNext, IconEditProfile, IconLanguage, IconRate, IconHelp } from '../../../assets'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const ListDoctor = ({profile, name, desc, type, onPress}) => {
+const List = ({profile, name, desc, type, onPress, icon}) => {
+    const Icon = ()=>{
+        if(icon === 'edit-profile' ){
+            return <IconEditProfile />
+        } 
+        if(icon === 'language' ){
+            return <IconLanguage />
+        } 
+        if(icon === 'rate' ){
+            return <IconRate />
+        } 
+        if(icon === 'help' ){
+            return <IconHelp />
+        } 
+
+        return <IconEditProfile />
+    }
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
-            <Image source={profile} style={styles.avatar} />
+            { icon ? <Icon /> :  <Image source={profile} style={styles.avatar} /> }
             <View style={styles.wrapper}>
 
             <Text style={styles.name}>{name}</Text>
@@ -21,7 +37,7 @@ const ListDoctor = ({profile, name, desc, type, onPress}) => {
     )
 }
 
-export default ListDoctor
+export default List
 
 const styles = StyleSheet.create({
     container: {
@@ -34,13 +50,13 @@ const styles = StyleSheet.create({
 
     },
     wrapper: {
-        flex: 1
+        flex: 1,
+        marginLeft: 16
     },
     avatar: {
         height: 46,
         width: 46,
-        borderRadius: 46/2,
-        marginRight: 12
+        borderRadius: 46/2
     },
     name: {
         fontSize: 16,
