@@ -1,18 +1,23 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
-import { DummyDoctor1, DummyDoctor2 } from '../../../assets'
 import { colors, fonts } from '../../../utils'
+import { IcNext } from '../../../assets'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const ListDoctor = () => {
+const ListDoctor = ({profile, name, desc, type, onPress}) => {
     return (
-        <View style={styles.container}>
-            <Image source={DummyDoctor2} style={styles.avatar} />
-            <View>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
+            <Image source={profile} style={styles.avatar} />
+            <View style={styles.wrapper}>
 
-            <Text style={styles.name}>Alexander Bell</Text>
-            <Text style={styles.desc}>Baik Pa.. thanks For Atention..</Text>
+            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.desc}>{desc}</Text>
             </View>
-        </View>
+            {
+                type === 'next' &&   <IcNext />
+            }
+          
+        </TouchableOpacity>
     )
 }
 
@@ -24,8 +29,12 @@ const styles = StyleSheet.create({
         padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: colors.border,
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-between'
 
+    },
+    wrapper: {
+        flex: 1
     },
     avatar: {
         height: 46,

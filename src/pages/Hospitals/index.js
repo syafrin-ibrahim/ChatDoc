@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import { fonts, colors } from "../../utils";
-import { HospitalBg } from '../../assets'
+import { HospitalBg, Hospital1, Hospital2, Hospital3 } from '../../assets'
 import { ListHospital } from '../../components';
 
 const Hospitals = () => {
@@ -14,9 +14,9 @@ const Hospitals = () => {
             <View style={styles.content}>
 
               
-                <ListHospital />
-                <ListHospital />
-                <ListHospital />
+                <ListHospital type="rumah sakit" name="rumah sakit jiwa umum" address="Jakarta Timur" pic={Hospital1}/>
+                <ListHospital type="rumah sakit anak" name="rumah sakit anak" address="Jakarta Barat" pic={Hospital2}/>
+                <ListHospital type="rumah sakit jiwa" name="rumah sakit jiwa" address="Jakarta Selatan" pic={Hospital3}/>
             </View>
         </View>
     )

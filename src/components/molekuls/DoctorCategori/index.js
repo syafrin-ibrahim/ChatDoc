@@ -1,15 +1,27 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { CatUmum } from '../../../assets'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { CatUmum, CatPsikiater, CatObat } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 
-const DoctorCategori = () => {
+const DoctorCategori = ({categ, onPress}) => {
+    const Icon = ()=>{
+        if(categ === 'umum'){
+            return <CatUmum style={styles.illus}/>
+        }
+        if(categ === 'psikiater'){
+            return <CatPsikiater style={styles.illus}/>
+        }
+        if(categ === 'obat'){
+            return <CatObat style={styles.illus}/>
+        }
+        return <CatUmum style={styles.illus}/>
+    }
     return (
-        <View style={styles.container}>
-            <CatUmum style={styles.illus}  />
+        <TouchableOpacity style={styles.container} onPress={onPress}>
+            <Icon  />
             <Text style={styles.label}>Saya Butuh </Text>
-            <Text style={styles.categ}>Dokter Umum</Text>
-        </View>
+            <Text style={styles.categ}>{categ}</Text>
+        </TouchableOpacity>
     )
 }
 

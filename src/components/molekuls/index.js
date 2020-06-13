@@ -6,4 +6,8 @@ import RatedDoctor from './RatedDoctor';
 import NewsItem from './NewsItem';
 import ListDoctor from './ListDoctor';
 import ListHospital from './ListHospital';
-export { ListHospital, ListDoctor, Header, BottomNavigator, HomeProfile, DoctorCategori, RatedDoctor,NewsItem };
+import ChatItem from './ChatItem';
+import InputChat from './InputChat';
+export { ChatItem, ListHospital, ListDoctor,
+     Header, BottomNavigator, HomeProfile,
+      DoctorCategori, RatedDoctor,NewsItem, InputChat };
