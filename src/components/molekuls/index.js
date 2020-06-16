@@ -10,7 +10,8 @@ import ChatItem from './ChatItem';
 import InputChat from './InputChat';
 import Profile from './Profile';
 import ProfileItem from './ProfileItem';
-export { ChatItem, ListHospital, List,
+import Loading from './Loading';
+export { Loading, ChatItem, ListHospital, List,
      Header, BottomNavigator, HomeProfile,
       DoctorCategori, RatedDoctor,NewsItem, 
       InputChat, Profile, ProfileItem };

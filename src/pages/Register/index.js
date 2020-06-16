@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, ScrollView } from 'react-native'
-import { Header, Input, Button, Gap } from '../../components'
-import { colors,useForm } from '../../utils'
+import { Header, Input, Button, Gap, Loading } from '../../components'
+import { colors,useForm, storeData } from '../../utils'
+import { Fire } from '../../config';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+
 
 const Register = ({navigation}) => {
     // const [name, setName] = useState('');
@@ -16,11 +19,43 @@ const Register = ({navigation}) => {
         pass: ''
     })
 
+    const [loading, setLoading] = useState(false);
+
     const onContinue = ()=>{
         console.log(form)
         //()=> navigation.navigate('UploadFoto')
+        
+        setLoading(true);
+        Fire.auth().createUserWithEmailAndPassword(form.email, form.pass)
+        .then((success)=>{
+            setLoading(false);
+            setForm('reset');
+            const data = {
+                fullName: form.name,
+                profession: form.prof,
+                email: form.email,
+
+            }
+            Fire.database()
+            .ref('users/' + success.user.uid + '/')
+            .set(data)
+            storeData('user', data);
+            navigation.navigate('UploadFoto');
+            console.log('success registrasi', success);
+        })
+        .catch((error) => {
+            const errorMessage = error.message;
+            setLoading(false);
+            showMessage({
+                message: errorMessage,
+                type: 'default',
+                backgroundColor: colors.error,
+                color: colors.white
+            })
+        });
     }
     return (
+        <>
         <View style={styles.page}>
             <Header onPress={ ()=> navigation.goBack() } title="Daftar Akun" />
             <View style={styles.content}>
@@ -36,8 +71,10 @@ const Register = ({navigation}) => {
                     <Button title="Continue" onPress={onContinue}/>
                 </ScrollView>
             </View>
- 
         </View>
+        { loading &&   <Loading /> }
+      
+        </>
     )
 }
 
