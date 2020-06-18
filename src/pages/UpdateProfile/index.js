@@ -1,24 +1,131 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { Header, Profile, Input, Button, Gap } from '../../components';
-
+import { Fire } from '../../config';
+import { showMessage } from 'react-native-flash-message';
+import { colors, storeData, getData } from '../../utils';
+import ImagePicker from 'react-native-image-picker';
+import { NullPhoto } from '../../assets';
 const UpdateProfile = ({navigation}) => {
+    const [profile, setProfile] = useState({
+        fullName: '',
+        prof: '',
+        email: ''
+    })
+    const [pass, setPass] = useState('');
+    const [photo, setPhoto] = useState(NullPhoto);
+    const [photoDb, setPhotoDb] = useState('');
+    useEffect(()=>{
+        getData('user').then(res => {
+            const data = res;
+            setPhoto({ uri: res.photo })
+            setProfile(data)
+        });
+    }, [])
+
+    const update = ()=>{
+        const data = profile;
+        data.photo = photoDb;
+        console.log('pass baru', pass);
+        if(pass.length > 0 ){
+            if(pass.length < 6 ){
+                showMessage({
+                             message: 'oops password kurang dari 6 character',
+                             backgroundColor: colors.error,
+                             color: colors.white,
+                             type: 'default'
+                         })
+            }else{
+              updatePass();  
+              updateDataProfile();
+              navigation.replace('MainApp');
+            }
+        }else{
+            updateDataProfile();
+            navigation.replace('MainApp');
+        }
+        
+    }
+
+    const updateDataProfile = ()=>{
+        const data = profile;
+        data.photo = photoDb;
+        console.log('pass baru', pass);
+        Fire.database()
+        .ref(`users/${profile.uid}/`)
+        .update(data)
+        .then(() => {
+            console.log('success', data);
+            storeData('user', data)
+        }).catch(err => {
+            showMessage({
+                message: err.message,
+                backgroundColor: colors.error,
+                color: colors.white,
+                type: 'default'
+            })
+        })
+    }
+
+    const updatePass = ()=>{
+        Fire.auth().onAuthStateChanged((user)=>{
+            if(user){
+                    user.updatePassword(pass).catch((err)=>{
+                        showMessage({
+                            message: err.message,
+                            backgroundColor: colors.error,
+                            color: colors.white,
+                            type: 'default'
+                        })
+                    })
+            }
+        });
+    }
+
+    const changeText = (key, value)=>{
+        setProfile({
+            ...profile,
+            [key]: value
+        })
+    }
+
+    const getImage = ()=>{
+        ImagePicker.launchImageLibrary({quality: 0.5, maxWidth: 200, height: 200}, (response)=>{
+            // console.log('response', response);
+            if(response.didCancel || response.error){
+                showMessage({
+                    message: 'ooops..,Sepertinya Anda Tidak Memilih Foto',
+                    type: 'default',
+                    backgroundColor: colors.error,
+                    color: colors.white
+                })
+            }else{
+                console.log(response);
+                setPhotoDb(`data:${response.type};base64, ${response.data}`);
+                console.log('foto db ', photoDb);              
+                const source = { uri: response.uri }
+                setPhoto(source);
+            
+
+            }
+        })
+    }
     return (
         <View style={styles.page}>
             <Header title="Update Profile" onPress={()=> navigation.goBack()}/>
             <ScrollView showsVerticalScrollIndicator={false} >
             <View style={styles.content}>
-                <Profile isRemove/>
+                <Profile isRemove photo={photo} onPress={getImage}/>
                 <Gap height={26} />
-                <Input label="Full Name"  />
+                <Input label="Full Name"  value={profile.fullName} onChangeText={(value)=>changeText('fullName', value)}/>
                 <Gap height={24} />
-                <Input label="Pekerjaan"  />
+                <Input label="Pekerjaan"  value={profile.profession} onChangeText={(value)=>changeText('profession', value)}/>
                 <Gap height={24} />
-                <Input label="Email"  />
+                <Input label="Email"  value={profile.email} disable/>
                 <Gap height={24} />
-                <Input label="Password"  />
+                <Input label="Password"  secureTextEntry value={pass} onChangeText={(value)=>setPass(value)}/>
                 <Gap height={24} />
-                <Button title="Save Profile" onPress={()=> navigation.goBack('UserProfile')} />
+                <Button title="Save Profile" onPress={update} />
                 <Gap height={40} />
               
             </View>

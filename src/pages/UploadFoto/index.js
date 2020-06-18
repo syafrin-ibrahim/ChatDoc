@@ -2,17 +2,20 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { Header, Button, Link, Gap } from '../../components';
 import { NullPhoto, AddPhoto, RemovePhoto } from '../../assets';
-import { colors, fonts } from '../../utils';
+import { colors, fonts, storeData } from '../../utils';
 import ImagePicker from 'react-native-image-picker';
 import { showMessage } from 'react-native-flash-message';
+import { Fire } from '../../config';
 
-const  UploadFoto = ({navigation}) => {
+const  UploadFoto = ({navigation, route}) => {
+    const { fullName, profession, uid } = route.params;
     const [hasFoto, setHasFoto] = useState(false);
     const [foto, setFoto] = useState(NullPhoto);
+    const [fotoDb, setFotoDb] = useState('');
 
     const getImage = ()=>{
-        ImagePicker.launchImageLibrary({}, (response)=>{
-            console.log('response', response);
+        ImagePicker.launchImageLibrary({quality: 0.5, maxWidth: 200, height: 200}, (response)=>{
+            // console.log('response', response);
             if(response.didCancel || response.error){
                 showMessage({
                     message: 'ooops..,Sepertinya Anda Tidak Memilih Foto',
@@ -21,6 +24,7 @@ const  UploadFoto = ({navigation}) => {
                     color: colors.white
                 })
             }else{
+                setFotoDb(`data:${response.type};base64, ${response.data}`);              
                 const source = { uri: response.uri }
                 setFoto(source);
                 setHasFoto(true);
@@ -28,6 +32,18 @@ const  UploadFoto = ({navigation}) => {
             }
         });
 
+    }
+    const uploadContinue = () => {
+        Fire.database()
+        .ref('users/' + uid + '/')
+        .update({photo: fotoDb})
+      
+        const data = route.params;
+        data.photo = fotoDb;
+        storeData('user', data);
+        
+        navigation.replace('MainApp')
+     
     }
     return (
         <View style={styles.page}>
@@ -40,11 +56,11 @@ const  UploadFoto = ({navigation}) => {
                         { !hasFoto && <AddPhoto style={styles.addphoto} /> }
                        
                     </TouchableOpacity>
-                    <Text style={styles.name}>Abraham Lincoln</Text>
-                    <Text style={styles.work}>Product Designer</Text>
+                    <Text style={styles.name}>{fullName}</Text>
+                    <Text style={styles.work}>{profession}</Text>
                 </View>
                 <View style={styles.work}>
-                    <Button disable={!hasFoto} title="Upload And Continue" onPress={()=> navigation.replace('MainApp')} />
+                    <Button disable={!hasFoto} title="Upload And Continue" onPress={uploadContinue} />
                     <Gap height={30} />
                     <Link title="Skip For This" align="center" size={16} onPress={()=> navigation.replace('MainApp')}/>
                 </View>

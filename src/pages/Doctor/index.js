@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { HomeProfile, DoctorCategori, RatedDoctor, Gap, NewsItem } from '../../components'
-import { fonts, colors } from '../../utils'
+import { fonts, colors, getData } from '../../utils'
 import { JSONCategory, DummyDoctor1} from '../../assets';
 
 const Doctor = ({navigation}) => {
+  
     return (
         <View style={styles.page}>
             
@@ -15,7 +16,7 @@ const Doctor = ({navigation}) => {
                         <HomeProfile onPress={()=> navigation.navigate('UserProfile')}/>
                         <Text style={styles.welcome}>Mau Konsultasi Dengan Siapa Hari Ini</Text>
                    </View>
-                <View style={styles.wrapper}>
+                    <View style={styles.wrapper}>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         <View style={styles.category}>
                             <Gap width={32}/>
@@ -29,18 +30,18 @@ const Doctor = ({navigation}) => {
                             <Gap width={22}/>
                         </View>
                     </ScrollView>
-                </View>
-                <View style={styles.wrapperSection}>
-                    <Text style={styles.sectionLabel}>Top Rated Doctor</Text>
-                    <RatedDoctor name="abraham samad" desc="psikiater" avatar={DummyDoctor1} onPress={()=> navigation.navigate('DoctorProfile')}     />
-                    <RatedDoctor name="leo manoppo" desc="dentist" avatar={DummyDoctor1}/>
-                    <RatedDoctor name="abdillah sugeng" desc="child" avatar={DummyDoctor1}/>
-                    <Text style={styles.sectionLabel}>Goog News</Text>
-                </View>               
-                <NewsItem />
-                <NewsItem />
-                <NewsItem />
-                <Gap height={30} />
+                    </View>
+                    <View style={styles.wrapperSection}>
+                        <Text style={styles.sectionLabel}>Top Rated Doctor</Text>
+                        <RatedDoctor name="abraham samad" desc="psikiater" avatar={DummyDoctor1} onPress={()=> navigation.navigate('DoctorProfile')}     />
+                        <RatedDoctor name="leo manoppo" desc="dentist" avatar={DummyDoctor1}/>
+                        <RatedDoctor name="abdillah sugeng" desc="child" avatar={DummyDoctor1}/>
+                        <Text style={styles.sectionLabel}>Goog News</Text>
+                    </View>               
+                    <NewsItem />
+                    <NewsItem />
+                    <NewsItem />
+                    <Gap height={30} />
                 </ScrollView>
             </View>
            

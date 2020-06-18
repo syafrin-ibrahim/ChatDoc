@@ -34,13 +34,13 @@ const Register = ({navigation}) => {
                 fullName: form.name,
                 profession: form.prof,
                 email: form.email,
-
+                uid: success.user.uid
             }
             Fire.database()
             .ref('users/' + success.user.uid + '/')
             .set(data)
             storeData('user', data);
-            navigation.navigate('UploadFoto');
+            navigation.navigate('UploadFoto', data);
             console.log('success registrasi', success);
         })
         .catch((error) => {
