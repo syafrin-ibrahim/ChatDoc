@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { Header, Profile, Input, Button, Gap } from '../../components';
 import { Fire } from '../../config';
 import { showMessage } from 'react-native-flash-message';
-import { colors, storeData, getData } from '../../utils';
+import { colors, storeData, getData, showError } from '../../utils';
 import ImagePicker from 'react-native-image-picker';
 import { NullPhoto } from '../../assets';
 const UpdateProfile = ({navigation}) => {
@@ -17,6 +17,7 @@ const UpdateProfile = ({navigation}) => {
     const [photoDb, setPhotoDb] = useState('');
     useEffect(()=>{
         getData('user').then(res => {
+            
             const data = res;
             setPhoto({ uri: res.photo })
             setProfile(data)
@@ -29,12 +30,7 @@ const UpdateProfile = ({navigation}) => {
         console.log('pass baru', pass);
         if(pass.length > 0 ){
             if(pass.length < 6 ){
-                showMessage({
-                             message: 'oops password kurang dari 6 character',
-                             backgroundColor: colors.error,
-                             color: colors.white,
-                             type: 'default'
-                         })
+               showError('oops password kurang dari 6 character');
             }else{
               updatePass();  
               updateDataProfile();
@@ -58,12 +54,7 @@ const UpdateProfile = ({navigation}) => {
             console.log('success', data);
             storeData('user', data)
         }).catch(err => {
-            showMessage({
-                message: err.message,
-                backgroundColor: colors.error,
-                color: colors.white,
-                type: 'default'
-            })
+           showError(err.message);
         })
     }
 
@@ -71,12 +62,7 @@ const UpdateProfile = ({navigation}) => {
         Fire.auth().onAuthStateChanged((user)=>{
             if(user){
                     user.updatePassword(pass).catch((err)=>{
-                        showMessage({
-                            message: err.message,
-                            backgroundColor: colors.error,
-                            color: colors.white,
-                            type: 'default'
-                        })
+                        showError(err.message);
                     })
             }
         });

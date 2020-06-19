@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, View, ScrollView } from 'react-native'
 import { Header, Input, Button, Gap, Loading } from '../../components'
-import { colors,useForm, storeData } from '../../utils'
+import { colors,useForm, storeData, showError } from '../../utils'
 import { Fire } from '../../config';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import { useDispatch } from 'react-redux';
 
 
 const Register = ({navigation}) => {
@@ -19,16 +19,14 @@ const Register = ({navigation}) => {
         pass: ''
     })
 
-    const [loading, setLoading] = useState(false);
-
+    const dispatch = useDispatch();
     const onContinue = ()=>{
         console.log(form)
         //()=> navigation.navigate('UploadFoto')
-        
-        setLoading(true);
+        dispatch({type: 'SET_LOADING', value: true});
         Fire.auth().createUserWithEmailAndPassword(form.email, form.pass)
         .then((success)=>{
-            setLoading(false);
+            dispatch({type: 'SET_LOADING', value: false});
             setForm('reset');
             const data = {
                 fullName: form.name,
@@ -45,17 +43,12 @@ const Register = ({navigation}) => {
         })
         .catch((error) => {
             const errorMessage = error.message;
-            setLoading(false);
-            showMessage({
-                message: errorMessage,
-                type: 'default',
-                backgroundColor: colors.error,
-                color: colors.white
-            })
+            dispatch({type: 'SET_LOADING', value: false});
+            showError(errorMessage);
         });
     }
     return (
-        <>
+    
         <View style={styles.page}>
             <Header onPress={ ()=> navigation.goBack() } title="Daftar Akun" />
             <View style={styles.content}>
@@ -72,9 +65,9 @@ const Register = ({navigation}) => {
                 </ScrollView>
             </View>
         </View>
-        { loading &&   <Loading /> }
+     
       
-        </>
+    
     )
 }
 

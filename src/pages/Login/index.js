@@ -1,26 +1,28 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Logo } from '../../assets'
-import { Input, Link, Gap, Button, Loading } from '../../components'
-import { colors, fonts, useForm, storeData } from '../../utils'
+import { Input, Link, Gap, Button } from '../../components'
+import { colors, fonts, useForm, storeData, showError } from '../../utils'
 import {Fire} from '../../config';
 import { showMessage } from 'react-native-flash-message'
 import { ScrollView } from 'react-native-gesture-handler'
+import { useDispatch } from 'react-redux'
 
 const Login = ({navigation}) => {
     const [ form, setForm] = useForm({
         email: '',
         pass: ''
     })
-    const [ loading, setLoading ] = useState(false);
+
+    const dispatch = useDispatch();
 
     const Login = ()=>{
         console.log('form : ', form);
-        setLoading(true);
+        dispatch({type: 'SET_LOADING', value: true});
         Fire.auth().signInWithEmailAndPassword(form.email, form.pass)
         .then(res => {
              console.log('success', res);
-             setLoading(false);
+             dispatch({type: 'SET_LOADING', value: false});
              Fire.database().ref(`users/${res.user.uid}/`).once('value')
              .then(data => {
                  console.log('user', data.val());
@@ -30,19 +32,13 @@ const Login = ({navigation}) => {
                  }
              })
         }).catch(err => {
-             console.log('error', err);
-             setLoading(false);
-             showMessage({
-                 message: err.message,
-                 type: 'default',
-                 backgroundColor: colors.error,
-                 color: colors.text
-             })
+             dispatch({type: 'SET_LOADING', value: false});
+             showError(err.message);
         }) 
        
     }
     return (
-        <>
+    
         <View style={ styles.page }>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Gap heigh={40} />
@@ -59,8 +55,8 @@ const Login = ({navigation}) => {
             <Link title="Create New Account" size={16} align="center" onPress={()=> navigation.navigate('Register')}/>
             </ScrollView>            
         </View>
-        {loading && <Loading /> }
-        </>
+       
+    
     )
 }
 

@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { Header, Button, Link, Gap } from '../../components';
 import { NullPhoto, AddPhoto, RemovePhoto } from '../../assets';
-import { colors, fonts, storeData } from '../../utils';
+import { colors, fonts, storeData, showError } from '../../utils';
 import ImagePicker from 'react-native-image-picker';
-import { showMessage } from 'react-native-flash-message';
 import { Fire } from '../../config';
 
 const  UploadFoto = ({navigation, route}) => {
@@ -17,12 +16,7 @@ const  UploadFoto = ({navigation, route}) => {
         ImagePicker.launchImageLibrary({quality: 0.5, maxWidth: 200, height: 200}, (response)=>{
             // console.log('response', response);
             if(response.didCancel || response.error){
-                showMessage({
-                    message: 'ooops..,Sepertinya Anda Tidak Memilih Foto',
-                    type: 'default',
-                    backgroundColor: colors.error,
-                    color: colors.white
-                })
+                showError('ooops..,Sepertinya Anda Tidak Memilih Foto');
             }else{
                 setFotoDb(`data:${response.type};base64, ${response.data}`);              
                 const source = { uri: response.uri }
@@ -41,7 +35,6 @@ const  UploadFoto = ({navigation, route}) => {
         const data = route.params;
         data.photo = fotoDb;
         storeData('user', data);
-        
         navigation.replace('MainApp')
      
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import {Header, Profile, List, Gap} from '../../components'
-import { getData } from '../../utils'
+import { getData, showError } from '../../utils'
 import { NullPhoto } from '../../assets'
 import { showMessage } from 'react-native-flash-message';
 import { Fire } from '../../config'
@@ -26,12 +26,7 @@ const UserProfile = ({navigation}) => {
             console.log('success sign out');
             navigation.replace('GetStarted');
         }).catch(err => {
-            showMessage({
-                message: err.message,
-                backgroundColor: colors.error,
-                color: colors.white,
-                type: 'default'
-            })
+           showError(err.message);
         });
 
     }
