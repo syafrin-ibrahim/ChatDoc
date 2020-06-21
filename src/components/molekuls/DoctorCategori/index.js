@@ -3,15 +3,15 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { CatUmum, CatPsikiater, CatObat } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 
-const DoctorCategori = ({categ, onPress}) => {
+const DoctorCategori = ({category, onPress}) => {
     const Icon = ()=>{
-        if(categ === 'umum'){
+        if(category === 'umum'){
             return <CatUmum style={styles.illus}/>
         }
-        if(categ === 'psikiater'){
+        if(category === 'psikiater'){
             return <CatPsikiater style={styles.illus}/>
         }
-        if(categ === 'obat'){
+        if(category === 'obat'){
             return <CatObat style={styles.illus}/>
         }
         return <CatUmum style={styles.illus}/>
@@ -20,7 +20,7 @@ const DoctorCategori = ({categ, onPress}) => {
         <TouchableOpacity style={styles.container} onPress={onPress}>
             <Icon  />
             <Text style={styles.label}>Saya Butuh </Text>
-            <Text style={styles.categ}>{categ}</Text>
+            <Text style={styles.categ}>{category}</Text>
         </TouchableOpacity>
     )
 }

@@ -19,7 +19,9 @@ const UpdateProfile = ({navigation}) => {
         getData('user').then(res => {
             
             const data = res;
-            setPhoto({ uri: res.photo })
+            data.photoDb = res?.photo?.length > 1 ? res.photo : NullPhoto;
+            const tempPhoto = res?.photo?.length > 1 ? {uri: res.photo} : NullPhoto;
+            setPhoto(tempPhoto)
             setProfile(data)
         });
     }, [])
@@ -34,11 +36,10 @@ const UpdateProfile = ({navigation}) => {
             }else{
               updatePass();  
               updateDataProfile();
-              navigation.replace('MainApp');
+           
             }
         }else{
             updateDataProfile();
-            navigation.replace('MainApp');
         }
         
     }
@@ -46,26 +47,31 @@ const UpdateProfile = ({navigation}) => {
     const updateDataProfile = ()=>{
         const data = profile;
         data.photo = photoDb;
+        console.log('data siap di upload', data);
         console.log('pass baru', pass);
         Fire.database()
         .ref(`users/${profile.uid}/`)
         .update(data)
         .then(() => {
-            console.log('success', data);
             storeData('user', data)
+            .then(()=>{
+                navigation.replace('MainApp');
+            }).catch(()=>{
+                showError('Terjadi Masalah');
+            })
         }).catch(err => {
            showError(err.message);
         })
     }
 
     const updatePass = ()=>{
-        Fire.auth().onAuthStateChanged((user)=>{
-            if(user){
-                    user.updatePassword(pass).catch((err)=>{
-                        showError(err.message);
-                    })
-            }
-        });
+        // Fire.auth().onAuthStateChanged((user)=>{
+        //     if(user){
+        //             user.updatePassword(pass).catch((err)=>{
+        //                 showError(err.message);
+        //             })
+        //     }
+        // });
     }
 
     const changeText = (key, value)=>{
@@ -86,7 +92,7 @@ const UpdateProfile = ({navigation}) => {
                     color: colors.white
                 })
             }else{
-                console.log(response);
+              
                 setPhotoDb(`data:${response.type};base64, ${response.data}`);
                 console.log('foto db ', photoDb);              
                 const source = { uri: response.uri }
