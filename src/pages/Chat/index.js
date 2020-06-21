@@ -16,6 +16,7 @@ const Chat = ({navigation, route}) => {
   const [chatContent, setChatContent] = useState('');
   const [user, setUser] = useState({});
   const [chatItem, setChatItem] = useState([]);
+
   useEffect(() => {
     getData('user').then(res => {
       setUser(res);
@@ -48,13 +49,30 @@ const Chat = ({navigation, route}) => {
           setChatItem(allChat);
         }
       });
-  }, []);
+  }, [doctor.data.uid, user.uid]);
 
   const chatSend = () => {
     const today = new Date();
     const urlFirebase = `chatting/${user.uid}_${
       doctor.data.uid
     }/allChat/${setDateChat(today)}`;
+    const urlMessageUser = `messages/${user.uid}/${user.uid}_${
+      doctor.data.uid
+    }`;
+    const urlMessageDoc = `messages/${doctor.data.uid}/${user.uid}_${
+      doctor.data.uid
+    }`;
+    const dataHistoryForUser = {
+      lastTextChat: chatContent,
+      lastChatDate: today.getTime(),
+      uidPartner: doctor.data.uid,
+    };
+    const dataHistoryForDoc = {
+      lastTextChat: chatContent,
+      lastChatDate: today.getTime(),
+      uidPartner: user.uid,
+    };
+
     const data = {
       sendBy: user.uid,
       chatDate: today.getTime(),
@@ -67,6 +85,14 @@ const Chat = ({navigation, route}) => {
       .push(data)
       .then(() => {
         setChatContent('');
+        //set data history caht user
+        Fire.database()
+          .ref(urlMessageUser)
+          .set(dataHistoryForUser);
+        //set data history chat for doctor
+        Fire.database()
+          .ref(urlMessageDoc)
+          .set(dataHistoryForDoc);
       })
       .catch(err => {
         showError(err.message);
